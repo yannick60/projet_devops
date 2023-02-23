@@ -1,0 +1,21 @@
+- name: Install and configure a staging machine
+  become: yes
+  hosts: staging
+  tasks:
+  - name: import
+    ansible.builtin.import_tasks: 
+      file: base.yml
+                    
+  - name: java
+    ansible.builtin.import_tasks: 
+      file: java.yml
+                                  
+  - name: Install Maven using Ansible
+    become: yes
+    apt:
+      name: "maven"
+      state: present
+
+  - name: docker
+    ansible.builtin.import_tasks: 
+      file: docker.yml

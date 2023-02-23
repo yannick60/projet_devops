@@ -1,0 +1,26 @@
+- name: Install and configure a developer machine
+  become: yes
+  hosts: server
+      
+  tasks:
+  - name: ci-server/base.yml
+    ansible.builtin.import_tasks: 
+        file: base.yml
+  - name: java
+    ansible.builtin.import_tasks: 
+      file: java.yml
+  - name: maven
+    ansible.builtin.import_tasks: 
+      file: maven.yml
+  - name: jenkins
+    ansible.builtin.import_tasks: 
+      file: ci-server/jenkins.yml
+  - name: sonarqube
+    ansible.builtin.import_tasks:
+      file: ci-server/sonarqube.yml
+  - name: jfrog
+    ansible.builtin.import_tasks:
+      file: ci-server/jfrogartifactory.yml
+  - name: docker
+    ansible.builtin.import_tasks: 
+      file: docker.yml

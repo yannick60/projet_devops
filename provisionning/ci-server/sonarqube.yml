@@ -1,0 +1,34 @@
+- name: check if sonarqube is installed
+  stat:
+    path: /opt/sonarqube
+  register: qube
+- name: install jfrog block
+  when: not qube.stat.exists
+  block:
+  - name: create user sonar
+    user:
+      name: sonar
+      createhome: no
+      shell: /bin/false
+  - name: get sonar binaries
+    unarchive:
+      src: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.9.10.61524.zip
+      remote_src: true
+      dest: /opt/
+      owner: sonar
+      group: sonar
+      validate_certs: false
+  - name: rename sonarqube folder
+    command: 
+      cmd: "mv sonarqube-8.9.10.61524 sonarqube"
+      chdir: "/opt/"
+  - name: create sonarqube service
+    copy:
+      src: files/sonarqube.service
+      dest: /etc/systemd/system/
+  - name: start and enable sonarqube
+    systemd:
+      daemon_reload: yes
+      name: sonarqube
+      state: started
+      enabled: true

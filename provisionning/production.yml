@@ -1,0 +1,17 @@
+- name: Install and configure a production machine
+  become: yes
+  hosts: production
+      
+  tasks:
+  - name: ci-server/base.yml
+    ansible.builtin.import_tasks: 
+        file: base.yml
+  - name: java
+    ansible.builtin.import_tasks: 
+      file: java.yml
+  - name: maven
+    ansible.builtin.import_tasks: 
+      file: maven.yml
+  - name: tomcat
+    ansible.builtin.import_tasks: 
+      file: tomcat.yml

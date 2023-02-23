@@ -1,0 +1,18 @@
+- name: Install and configure a developer machine
+  become: yes
+  hosts: dev1
+  tasks:
+  - name: import
+    ansible.builtin.import_tasks: 
+      file: base.yml
+  
+  - name: java
+    ansible.builtin.import_tasks: 
+      file: java.yml
+  
+  - name: Install Maven using Ansible
+    become: yes
+    apt:
+      name: "maven"
+      state: present
+                      

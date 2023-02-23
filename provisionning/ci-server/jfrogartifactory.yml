@@ -1,0 +1,22 @@
+- name: check if artifactory is installed
+  stat:
+    path: /opt/jfrog/artifactory
+  register: jfrog
+
+- name: install jfrog block
+  when: not jfrog.stat.exists
+  block:
+  - name: get deb
+    get_url:
+      url: https://releases.jfrog.io/artifactory/artifactory-debs/pool/jfrog-artifactory-oss/jfrog-artifactory-oss-6.17.4.deb
+      dest: /tmp/
+
+  - name: install deb
+    apt:
+      deb: /tmp/jfrog-artifactory-oss-6.17.4.deb
+
+  - name: start and enable service
+    systemd:
+      name: artifactory
+      state: started
+      enabled: true
